@@ -1,4 +1,4 @@
-bench testing the \<INSERT INSTRUMENT NAME HERE\>
+README for the Brion Leroux CSD Oil Temp Indicator
 
 **OVERVIEW**
 describe at a high level what this instrument does
