@@ -31,8 +31,7 @@ aircraft/<aircraft>/                             one folder per airframe — ins
     ├── cockpit-map.md                           panel locations, overview photos
     └── panels/<panel>/<module>/                 module README is the LEAF (see below)
 
-systems/                                         cross-cutting topics (ARINC 429, synchros, …)
-bench/                                           test-rig docs, fixtures, procedures
+systems/                                         cross-cutting topics (ARINC 429, synchros, …) and generic test methods
 templates/                                       copy-paste scaffolds
 glossary.md
 ```
@@ -57,7 +56,8 @@ If a single slot accumulates more than about a screenful of install-specific con
 | The cockpit layout of an airframe, panel locations, overview photos | `aircraft/<aircraft>/cockpit-map.md` |
 | Airframe-specific system architecture (electrical bus topology, hydraulic schematic) | `aircraft/<aircraft>/systems/<topic>/` |
 | A protocol or bus that's not airframe-specific (ARINC 429, ARINC 561, synchro signals, 26 VAC ref) | `systems/<topic>/` |
-| The bench rig, a test fixture, a procedure that applies to many units | `bench/<topic>/` |
+| A generic test method (sniffing ARINC 429, exciting a synchro, decoding a BCD wheel) | `systems/<topic>/test-methods.md` (alongside the protocol/signal it applies to) |
+| Bench-test results for a specific unit | `avionics/<unit>/bench-test.md` |
 
 If a piece of content fits in two places, put it where it primarily lives and link from the other.
 
@@ -190,6 +190,31 @@ Large binaries — full scanned datasheets, raw scope captures, multi-megabyte l
 3. **Git LFS** — for files we genuinely need at full fidelity and which can't be reduced. Talk to a maintainer before enabling LFS for a new file type; LFS bandwidth has costs.
 
 If you're about to commit anything over ~5 MB, stop and ask in the PR.
+
+## Bench safety
+
+The avionics we work with were designed for industrial environments and don't pretend to be safe to handle. Read this before you power anything up. There is no single project bench — each contributor's setup differs — but the hazards below apply to all of them.
+
+**Electrical**
+
+- **115 VAC / 400 Hz** is line voltage at higher frequency. It will hurt or kill you the same as 60 Hz mains. Treat all 115 VAC and 26 VAC reference circuits as live.
+- **28 VDC** is lower voltage but aircraft buses are designed for very high fault current. A short between 28 V and ground through a watch band, ring, or piece of wire will start a fire and weld metal. Remove jewelry; use fused leads.
+- **Capacitor discharge** — many older units have large filter capacitors that retain charge after power-down. Discharge before opening.
+- **ESD** — many digital units are ESD-sensitive. Use a wrist strap and an ESD mat when handling boards or removing covers.
+- **Don't connect or disconnect circular connectors under power.** Pin damage and arc-over both happen.
+
+**Hazardous materials in older avionics**
+
+- **Radium-painted dials** — pre-1960s instruments may have radium dial markings. Don't open the bezel on a glow-in-the-dark instrument without confirming what the lume is. Promethium and tritium dials are also possible; tritium is much lower hazard than radium, but still warrants handling care.
+- **PCB-filled capacitors** — certain pre-1979 capacitors contain polychlorinated biphenyls. Don't crush or burn old caps from that era.
+- **Lead solder** — most pre-2006 boards use leaded solder. Wash hands after handling; ventilate when reworking.
+- **Mercury switches** — present in some legacy tilt sensors and altimeter capsules. Don't disassemble destructively without first checking what's inside.
+
+**General**
+
+- Eye protection when probing high-density connectors or soldering.
+- Solder-fume ventilation if you're doing more than spot rework.
+- If you're unsure about a unit before powering it up — what voltage, what reference, what's behind the bezel — ask in a PR or in the project chat before applying power.
 
 ## Status flags
 
