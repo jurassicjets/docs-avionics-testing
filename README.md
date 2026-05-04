@@ -18,6 +18,15 @@ The repo splits content along two axes: how the *airframe* is configured, and wh
 
 Read **[CONTRIBUTING.md](CONTRIBUTING.md)** before adding content. It covers naming conventions, the per-instrument file skeleton, image and large-file handling, and how to handle instruments that appear in multiple aircraft.
 
-## Future docs site
+## Docs site
 
-This repo is structured to be rendered by [MkDocs Material](https://squidfunk.github.io/mkdocs-material/) and published at `avionics-docs.jurassicjets.com` when we're ready. Until then, GitHub renders it directly — no tooling required to read or contribute.
+Rendered with [MkDocs Material](https://squidfunk.github.io/mkdocs-material/) and deployed to **[avionics-docs.jurassicjets.com](https://avionics-docs.jurassicjets.com/)** on every push to `main` via GitHub Actions (see [`.github/workflows/docs.yml`](.github/workflows/docs.yml)). GitHub also renders the markdown directly in this repo, so you don't need any tooling to read or contribute.
+
+### Building the site locally
+
+```bash
+pip install -r requirements-docs.txt
+mkdocs serve
+```
+
+Then open <http://localhost:8000>. Edits hot-reload.
