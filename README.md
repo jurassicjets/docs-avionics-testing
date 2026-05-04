@@ -2,27 +2,13 @@
 
 Bench-test notes, pinout discoveries, signal traces, and "how does this LRU actually work" writeups for the electromechanical and early-digital avionics that lived in 707s, 727s, 737-classics, 747-classics, DC-8s, DC-9s, L-1011s, and their kin.
 
-This repo is the institutional knowledge base for what we learn at the bench. It's organized so a contributor — sim enthusiast or active commercial captain — can find the unit they care about, see what's known about it, and add what they've learned.
+The full documentation lives in **[`docs/`](docs/)** and is rendered at:
 
-## Navigation
+**[avionics-docs.jurassicjets.com](https://avionics-docs.jurassicjets.com/)**
 
-The repo splits content along two axes: how the *airframe* is configured, and what each *unit* is.
+For contribution guidelines, see [`docs/CONTRIBUTING.md`](docs/CONTRIBUTING.md).
 
-- **[avionics/](avionics/)** — Unit-level registry. One folder per LRU type, documenting pinouts, behavior, bench tests, quirks, datasheets — written once regardless of how many copies exist or how many airframes carry it.
-- **[aircraft/](aircraft/)** — Per-airframe configuration. Each aircraft has cockpit map and `panels/<panel>/<module>/` — the module README is the leaf and lists each install slot, linking out to `avionics/`. Currently: [b747-300-ja8179](aircraft/b747-300-ja8179/README.md).
-- **[systems/](systems/)** — Cross-cutting topics that span multiple instruments and airframes: ARINC 429, synchros, 28 VDC distribution, 400 Hz AC, etc. Also where generic test methods (sniffing a bus, exciting a synchro) live, alongside the protocol they apply to.
-- **[templates/](templates/)** — Starter scaffolds. Copy-paste, then fill in.
-- **[glossary.md](glossary.md)** — Acronyms, part-number conventions, and term-of-art definitions.
-
-## Contributing
-
-Read **[CONTRIBUTING.md](CONTRIBUTING.md)** before adding content. It covers naming conventions, the per-instrument file skeleton, image and large-file handling, and how to handle instruments that appear in multiple aircraft.
-
-## Docs site
-
-Rendered with [MkDocs Material](https://squidfunk.github.io/mkdocs-material/) and deployed to **[avionics-docs.jurassicjets.com](https://avionics-docs.jurassicjets.com/)** on every push to `main` via GitHub Actions (see [`.github/workflows/docs.yml`](.github/workflows/docs.yml)). GitHub also renders the markdown directly in this repo, so you don't need any tooling to read or contribute.
-
-### Building the site locally
+## Building the site locally
 
 ```bash
 pip install -r requirements-docs.txt
@@ -30,3 +16,10 @@ mkdocs serve
 ```
 
 Then open <http://localhost:8000>. Edits hot-reload.
+
+## Repository layout
+
+- [`docs/`](docs/) — all documentation content (the published site).
+- [`mkdocs.yml`](mkdocs.yml) — MkDocs Material configuration.
+- [`requirements-docs.txt`](requirements-docs.txt) — Python deps for building the docs.
+- [`.github/workflows/docs.yml`](.github/workflows/docs.yml) — builds and deploys on every push to `main`.

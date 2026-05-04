@@ -7,20 +7,7 @@ repo_url: https://github.com/jurassicjets/docs-avionics-testing
 repo_name: jurassicjets/docs-avionics-testing
 edit_uri: edit/main/
 
-docs_dir: .
-
-# Files at the repo root that aren't documentation content.
-# Patterns are gitignore-style, relative to docs_dir.
-exclude_docs: |
-  /mkdocs.yml
-  /requirements-docs.txt
-  /.gitignore
-  /.github/
-  /site/
-  /.venv/
-  /venv/
-  /node_modules/
-  /.DS_Store
+docs_dir: docs
 
 theme:
   name: material
