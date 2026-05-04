@@ -11,10 +11,10 @@ avionics/<type>-<manufacturer>-<partnumber>/
 ├── README.md          identification, function, status, "installed in" links
 ├── pinouts.md         connector pinouts and signal definitions
 ├── bench-test.md      what we did, what we observed, with dates
-├── quirks.md          undocumented behavior, gotchas, failure modes
-├── photos/
+├── photos/            pictures of instrument or test setup
 ├── captures/          scope traces, logic-analyzer dumps
-└── datasheets/        manufacturer datasheets, CMM excerpts, IPC pages
+├── schematics/        wiring diagrams, WDM pages, logic diagrams
+└── datasheets/        manufacturer datasheets, AMM excerpts
 ```
 
 See [`../CONTRIBUTING.md`](../CONTRIBUTING.md) for naming conventions, the file skeleton, and the slot-linking convention used in module READMEs.
