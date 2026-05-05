@@ -7,7 +7,7 @@ repo_url: https://github.com/jurassicjets/docs-avionics-testing
 repo_name: jurassicjets/docs-avionics-testing
 edit_uri: edit/main/
 
-docs_dir: docs
+docs_dir: _site_src
 
 theme:
   name: material

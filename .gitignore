@@ -1,5 +1,6 @@
-# MkDocs build output
+# MkDocs build output and staging
 /site/
+/_site_src/
 
 # Python
 __pycache__/
