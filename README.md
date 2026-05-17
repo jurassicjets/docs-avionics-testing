@@ -18,6 +18,18 @@ The repo splits content along two axes: how the *airframe* is configured, and wh
 
 Read **[CONTRIBUTING.md](CONTRIBUTING.md)** before adding content. It covers naming conventions, the per-instrument file skeleton, image and large-file handling, and how to handle instruments that appear in multiple aircraft.
 
-## Future docs site
+## Docs site
 
-This repo is structured to be rendered by [MkDocs Material](https://squidfunk.github.io/mkdocs-material/) and published at `avionics-docs.jurassicjets.com` when we're ready. Until then, GitHub renders it directly — no tooling required to read or contribute.
+Rendered with [MkDocs Material](https://squidfunk.github.io/mkdocs-material/) and deployed to **[avionics-docs.jurassicjets.com](https://avionics-docs.jurassicjets.com/)** on every push to `main` via [GitHub Actions](https://github.com/jurassicjets/docs-avionics-testing/blob/main/.github/workflows/docs.yml). GitHub also renders the markdown directly in this repo, so you don't need any tooling to read or contribute.
+
+### Building the site locally
+
+MkDocs forbids `docs_dir` from being the parent of `mkdocs.yml`, but we want content to live at the repo root rather than under a `docs/` wrapper. The build uses a tiny staging step ([`scripts/stage_docs.sh`](scripts/stage_docs.sh)) that creates a `_site_src/` directory of symlinks pointing back to the real files. Edits to the source files are visible immediately because they're symlinks, so `mkdocs serve` works normally after one stage.
+
+```bash
+pip install -r requirements-docs.txt
+./scripts/stage_docs.sh
+mkdocs serve
+```
+
+Then open <http://localhost:8000>. Edits to existing files hot-reload; if you add a new top-level item (a new directory at the repo root), re-run `./scripts/stage_docs.sh`.
