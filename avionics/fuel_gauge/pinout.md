@@ -1,4 +1,4 @@
-Pinout for the \<INSERT INSTRUMENT NAME HERE\>
+Pinout for the BF Goodrich Digital Fuel Gauge
 
 <table>
 <tr><th>J1</th><th>J2</th><th>J3</th><th>J4</th></tr>

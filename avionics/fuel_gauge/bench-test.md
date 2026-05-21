@@ -1,4 +1,4 @@
-bench testing the \<INSERT INSTRUMENT NAME HERE\>
+bench testing the BF Goodrich Digital Fuel Gauge
 
 _________________________________
 **EQUIPMENT REQUIRED**
@@ -19,4 +19,4 @@ _________________________________
 _________________________________
 **LAB LOG**
 
-1/2/34 - add timestamps for what is done during lab testing sessions, notes on what was acomplished, etc. 
+5/18/26 - Generated ARINC 429 signals with an arduino and driver circuit. Did a 12.5mHz sweep of all ARINC labels with arbitrary data in an attempt to get a response. Did not see any activity from the gauge, continued to display A.6 error code. Strapped all config pins to ground to emulate center wing tank gauge. 

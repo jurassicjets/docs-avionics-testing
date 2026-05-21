@@ -1,4 +1,4 @@
-README for the BF Goodrich Digital Fuel Gauge
+README for the Kollsman Vertical Speed Indicator with Resolution Advisory
 
 _________________________________
 **OVERVIEW**
