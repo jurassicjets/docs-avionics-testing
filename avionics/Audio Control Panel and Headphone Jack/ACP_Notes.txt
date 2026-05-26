@@ -1,0 +1,215 @@
+**NOTES**
+Overview - The ACP (audio control panel) is the primary method of controlling all radio and audio channels for both transmitting and receiving. The ACP has two connections, one bundle which runs from the ACP to the E&E bay, where it is controlled and routed. The second plug remains within the flight deck, where it routes signals to and from various headsets, speakers, and buttons. The face of the ACP has a row of interconnected pushbuttons to select which transmission channel to use. Below this, it has an array of push button knobs. Pressing the knobs in will select the audio from that channel to be heard. Twisting the knob will control volume for that channel. There is no limit to how many channels may be selected for output at a given time. There are two switches, one which switches between two redundant audio amplifiers, and one to select between using the boom (headset) mic, and oxygen mask mic, for transmissions. The ACP is powered via 28v DC for core functionality, and 115v AC for panel backlighting. Within the unit there are two relays, one which controls transmissions via PTT (push to talk), and one which controls mic routing for flight interphone hot mic. Each station in the flight deck has it's own ACP which controls the respective audio devices for that station. All ACPs are identical and interchangable, however different stations have different overall functionality due to which audio equipment is connected to the ACP.  
+
+Power restoration is required - ACPs are powered by the audio control box in the E&E bay, therefore there is no power via CB in the cockpit. Power will need to be restored manually. 
+
+Grounding requirements - chassis ground, flt intph common, pa common are all required. Either audio common or voice rec lo is required (shorted together within ACP so only one is needed). Audio common must be tied to the power supply ground as this is used to ground the amplifiers, which are powered from the 28v bus. Mic should be tied to power supply ground but is not strictly required. This is required in order to utilize control channels, which have pull-up resistors. If the pull-up resistors are powered via another power source then the mic will instead be tied to that source ground. 
+
+Speaker mute - this function works by pulling down the wire to ground. Only the captain and first officer have speakers, which are driven by their respective ACPs. The speaker will mute when interphone hot mic is selected by the ACP. The speaker mute wire may be interfaced externally to the ACP if desired in order to force the speakers to mute regardless of ACP configuration. Speaker muting does not impact the TCAS and GPWS callouts which also utilize these speakers. 
+
+Audio signal - All audio signals are tied together outside of the ACP for a given radio channel. Audio comes in to the ACP at line level and is mixed onto the main output channel via a potentiometer, which is connected to the volume/select knob on the ACP. All selected radio channels are sent onto the main output bus, which then goes through an amplifier before being sent to the headsets. There are two amplifiers for redundancy, which can be selected via the switch on the ACP. Audio signals all share a common audio ground. 
+
+Mic signals - Not all radio channels have a mic signal. The channels with mic capability route it through a series of switches and relays. The headset (boom) and oxygen mask go through a switch to select between the two, and then through a PTT relay, which gets it's driving signal from the various PTT buttons in the cockpit. The handheld mic has a PTT integral to the unit and therefore is considered hot by the ACP. All inputs converge to an internal mic bus, which goes to all of the mic select buttons. The mic select buttons on the ACP are interlocked to only allow one to be selected at a time. When one is selected, it will connect the mic bus to the output for that channel. All non-selected mic outputs are set to high-Z. All microphones share a common ground, which is connected to the flight interphone common normally, unless the PA is selected as the output, in which case it will use the PA common. 
+
+Control signals - all mic channels except for flight interphone also contain a control signal. This signal is used externally to prevent multiple people from transmitting on the same channel simultaneously. The control signal works by shorting the output to the common ground of the mic. This in turn pulls down the signal to ground, via a diode to prevent back-powering the control signal for some unknown reason. The control signal is routed through the PTT relay. In it's normally closed state, the control signal is connected to the PTT input from the handheld mic, which grounds when the PTT button is pressed. When the PTT relay is energized it will switch the control signal to be connected to the mic common (either PA or INTPH depending which is selected). This functionally gives preference to the boom/oxygen mask microphones over the handheld mic. When neither handheld or boom/oxy PTT are pressed, the control signal will be held high via a pull-up resistor external to the ACP. Control signals are handled externally to the ACP in order to select the correct signal. Control signals are unique to each voice channel, thereby permitting multiple people to transmit simultaneously provided they are talking on different channels. 
+
+Flight Interphone - The interphone system works uniquely to all other voice channels. Because the interphone allows mutliple simultaneous transmissions, there is no control signal. The control signal will still be set internally, however when the interphone is selected on the ACP it does not route this control signal out of the ACP anywhere. The interphone system has the option for a hot-mic via a switch on the control column. When this is selected it will bypass the PTT relay and mic select buttons and connect the mic input directly to the output. The interphone hot mic switch may be momentary or latch depending on customer option. Because of this, you can have another mic channel selected via the ACP while talking on interphone. When hot-mic is released and ptt is pressed it will transmit on the selected channel. When the hot mic is selected it will prohibit transmission on any other channel, even if selected. Enabling hot-mic will mute the speaker to prevent a feedback loop. 
+
+Sidetone - sidetone is generated externally to the ACP. This is done by feeding the mic signal back into the audio stream, which then can be heard by all pilots with that output selected, including the pilot who is making the transmission. Because this is done downstream of the mic control signal selection logic it will only provide sidetone for the selected mic. If multiple people attempt to transmit at the same time on the same channel, only sidetone from the selected output will be heard. 
+
+
+
+
+
+**NOTES FROM HANGAR TESTING**
+1. try a larger resistor for pull-up control signals to reduce noise
+2. figure out a way to drain the voltage from mic common, possibly reduce voltage. Maybe an option by using another pin on the arduino as a "drain" pin, which will ground the control inputs while being pressed with a very high duty cycle. Intermittently and frequently it will release the ground in order to "check" if PTT is still pressed. Maybe run it via a diode? 
+3. test FDR output
+4. order pre-amps
+5. determine how to mount and route
+6. 
+
+
+**TO DO LIST**
+1. VHF radio software
+2. VHF radio bundle
+3. ACP revision
+4. ACP interfacing boards and pre-amps
+5. Scenery
+6. XPDR testing
+7. fuel gauge testing
+8. why doesnt speaker mute work? - possibly working as intended. "The muting circuit inserts a resistance into the amplifier input circuit to attenuate the amplifier output level whenever a PTT circuit is completed in the flight compartment" - AMM 23-51-00 (p.616). ask Jos about speaker muting functionality
+9. figure out hot mic - I think the best way is to remove the switch and add a "bump" to the top of it, in order to make it press when in the resting position. See AMM 23-51-10 (p.665). Note that this may also make it really soft to press PTT. Experimenting should be done to fine-tune the thickness of the bump to ensure it presses the button without forcing the rocker switch to be unstable or even forcing it into the PTT R/T detent. An alternative option would be to disconnect the wires and screw the button in further, thereby biasing the installation position. As an additional note, having the interphone permenantly engaged will also engage the speaker mute, which will limit the output volume of the speakers. This may be desireable, but should be noted as a knock-on effect. An alternate and more intrusive option to engage hot-mic would be to intercept the PTT and hot-mic wires, in addition to the chassis ground (ACP J2 pins 16, 22 and 23 respectively) and add in a transistor to pull the hot-mic to ground always, except when PTT is grounded, when it would release the hot-mic ground. This would have the same effect in which hot-mic will be engaged whenever PTT isn't pressed. This comes with the added benefit of being able to put it in series with a switch which could disable the always-hot-mic, but at the cost of a more complex implementation. 
+
+
+
+
+**BUNDLES**
+	W295 - CPT
+	W299 - FO
+	W297 - FE
+	W301 - OSB1
+	W335 - OBS2
+
+**POWER AND GROUND**
+Note: all wires are RZ## except for FDR signals
+	45 - PA COMMON (GND)
+	65 - AUDIO COMMON (GND)
+	68 - 28V
+	67 - CHASSIS GND
+	73 - INTPH COMMON (GND)
+	RX12 - VOICE RECORDER LO (GND, REDUNDANT W/ 65)
+	49 - SPEAKER MUTE (OPTIONAL, PULL TO GND)
+	
+**RADIO CHANNELS**
+VHF 1
+	12 - MIC
+	64 - AUD
+	13 - CONTROL
+VHF 2
+	32 - MIC
+	63 - AUD
+	33 - CONTROL
+
+VHF 3
+	24 - MIC
+	62 - AUD
+	25 - CONTROL
+
+HF 1
+	18 - MIC
+	61 - AUD
+	19 - CONTROL
+
+HF 2
+	38 - MIC
+	60 - AUD
+	39 - CONTROL
+
+PA
+	44 - MIC
+	57 - AUD
+	46 - CONTROL
+
+FLT INTPH
+	72 - MIC
+	59 - AUD
+
+VOR 1
+	55
+	
+VOR 2
+	56
+	
+DME 1
+	1
+	
+DME 2
+	3
+	
+ADF 1
+	51
+	
+ADF 2
+	53
+	
+MKR
+	50
+	
+	
+	
+	
+**BUNDLE LIST**
+	W295 - CPT
+	W299 - FO
+	W297 - FE
+	W301 - OSB1
+	W335 - OBS2
+
+**WIRE LIST**
+Note: all wires are RZ## except for FDR signals
+RX12	VOICE LO 	GND				REDUNDANT W/ 65
+1		DME 1		AUD
+3		DME 2		AUD
+12		VHF 1		MIC
+13		VHF 1		CONTROL
+18		HF 1		MIC
+19		HF 1		CONTROL
+24		VHF 3		MIC
+25		VHF 3		CONTROL
+32		VHF 2		MIC
+33		VHF 2		CONTROL
+38		HF 2		MIC
+39		HF 2		CONTROL
+44		PA			MIC
+45 		PA COM		GND
+46		PA			CONTROL
+49		SPKR MUTE	PULL TO GND		OPTIONAL
+50		MKR			AUD
+51		ADF 1		AUD
+53		ADF 2		AUD
+55		VOR 1		AUD
+56		VOR 2		AUD
+57		PA			AUD
+59		FLT INTPH	AUD
+60		HF 2		AUD
+61		HF 1		AUD
+62		VHF 3		AUD
+63		VHF 2		AUD
+64		VHF 1		AUD
+65		AUDIO COM 	GND
+67		CHASSIS	GND GND
+68		POWER		28V
+72		FLT INTPH	MIC
+73		INTPH COM 	GND
+
+
+
+
+**INTERFACING REQUIREMENTS**
+REQUIRED FOR ACP OPERATION
+	65		AUDIO COM 	GND
+	67		CHASSIS GND	GND
+	68		POWER		28V
+	73		INTPH COM 	GND
+
+REQUIRED FOR FLIGHT
+	12		VHF 1		MIC
+	32		VHF 2		MIC
+	59		FLT INTPH	AUD
+	63		VHF 2		AUD
+	64		VHF 1		AUD
+	72		FLT INTPH	MIC
+
+DESIRED FOR FLIGHT
+	13		VHF 1		CONTROL
+	33		VHF 2		CONTROL
+	44		PA			MIC
+	45 		PA COM		GND
+	46		PA			CONTROL
+	57		PA			AUD
+
+OPTIONAL
+	RX12	VOICE LO 	GND				REDUNDANT W/ 65
+	1		DME 1		AUD
+	3		DME 2		AUD
+	18		HF 1		MIC
+	19		HF 1		CONTROL
+	24		VHF 3		MIC
+	25		VHF 3		CONTROL
+	38		HF 2		MIC
+	39		HF 2		CONTROL
+	49		SPKR MUTE	PULL TO GND		OPTIONAL
+	50		MKR			AUD
+	51		ADF 1		AUD
+	53		ADF 2		AUD
+	55		VOR 1		AUD
+	56		VOR 2		AUD
+	60		HF 2		AUD
+	61		HF 1		AUD
+	62		VHF 3		AUD
+
+
+
+
+

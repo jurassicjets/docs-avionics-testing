@@ -1,234 +1,275 @@
 /*
-  ARINC429 debugger V4 — priority + wobble + staged timing
+    ARINC429 Fuel Gauge Test Generator
+    ----------------------------------
 
-  Key properties:
-    - priority label sweep ALWAYS runs first each phase
-    - remainder sweep avoids duplicate priority labels
-    - controlled data wobble (small triangle wave)
-    - correct ARINC label bit reversal
-    - phase-based dwell progression
-    - LED indicates phase + activity heartbeat
+    Fixed parameters discovered experimentally:
+
+        LABEL = 034 octal
+        SDI   = 3
+        SSM   = 3
+
+    Payload:
+        Random BCD-encoded weight data
+
+    Output:
+        12.5 kbps ARINC429
+        1 second gap between messages
+
+    Hardware:
+        Nano / ATmega328P
+        CD4053 dual-mux topology
+
+    Wiring:
+        D8  -> ARINC data select
+        D4  -> mux zero-state select
+        D13 -> trigger + onboard LED
+
+    Timing:
+        80 us bit period
+        return-to-zero signaling
 */
 
-#define POLARITY_PIN 8
-#define ENABLE_PIN   4
-#define TRIG_PIN     2
 
-// ---------- Fast IO ----------
+// ============================================================
+// PIN DEFINITIONS
+// ============================================================
 
-// D8 = PB0
-#define POLARITY_HIGH PORTB |=  (1 << 0)
-#define POLARITY_LOW  PORTB &= ~(1 << 0)
+#define DATA_PIN   8
+#define ZERO_PIN   4
+#define TRIG_PIN   13
 
-// D4 = PD4
-#define TX_ENABLE  PORTD |=  (1 << 4)
-#define TX_DISABLE PORTD &= ~(1 << 4)
 
-// D2 = PD2
-#define TRIG_HIGH PORTD |=  (1 << 2)
-#define TRIG_LOW  PORTD &= ~(1 << 2)
+// Fast direct port control
+#define DATA_HIGH  PORTB |=  (1 << 0)
+#define DATA_LOW   PORTB &= ~(1 << 0)
 
-// D13 LED
-#define LED_HIGH PORTB |=  (1 << 5)
-#define LED_LOW  PORTB &= ~(1 << 5)
+#define ZERO_HIGH  PORTD |=  (1 << 4)
+#define ZERO_LOW   PORTD &= ~(1 << 4)
 
-// ---------- Timing ----------
+
+// ============================================================
+// ARINC TIMING
+// ============================================================
 
 const uint16_t FULL_BIT_US = 80;
-const uint16_t HALF_BIT_US = FULL_BIT_US / 2;
-const uint16_t WORD_GAP_US = FULL_BIT_US * 4;
+const uint16_t HALF_BIT_US = 40;
 
-// ---------- Priority range (octal) ----------
-const uint8_t PRI_START = 040;
-const uint8_t PRI_END   = 0177;
+const uint32_t MESSAGE_GAP_MS = 1000;
 
-// ---------- Wobble state ----------
-int16_t wobble = 0;
-int8_t wobbleDir = 1;
 
-const uint16_t baseValue = 0x1234;
-const int16_t wobbleMax = 6;
+// ============================================================
+// ARINC CONSTANTS
+// ============================================================
 
-// ---------- LED heartbeat ----------
-unsigned long lastBeat = 0;
-bool beatState = false;
+const uint8_t LABEL = 034;   // octal
+const uint8_t SDI   = 3;
+const uint8_t SSM   = 3;
 
-void heartbeat()
+
+// ============================================================
+// ENTER ZERO STATE
+// ============================================================
+
+inline void setZeroState()
 {
-    if (millis() - lastBeat > 120)
-    {
-        beatState = !beatState;
-        if (beatState) LED_HIGH;
-        else LED_LOW;
-
-        lastBeat = millis();
-    }
+    ZERO_HIGH;
 }
 
-// ---------- ARINC label reverse ----------
-uint8_t reverse8(uint8_t b)
+
+// ============================================================
+// DRIVE ARINC ONE
+// ============================================================
+
+inline void driveOne()
 {
-    b = (b & 0xF0) >> 4 | (b & 0x0F) << 4;
-    b = (b & 0xCC) >> 2 | (b & 0x33) << 2;
-    b = (b & 0xAA) >> 1 | (b & 0x55) << 1;
-    return b;
+    ZERO_LOW;
+    DATA_HIGH;
 }
 
-// ---------- TX pulse ----------
-inline void rzPulse(bool bitVal)
+
+// ============================================================
+// DRIVE ARINC ZERO
+// ============================================================
+
+inline void driveZero()
+{
+    ZERO_LOW;
+    DATA_LOW;
+}
+
+
+// ============================================================
+// TRANSMIT SINGLE BIT
+// ============================================================
+
+inline void sendBit(bool bitVal)
 {
     if (bitVal)
-        POLARITY_HIGH;
+        driveOne();
     else
-        POLARITY_LOW;
-
-    TX_ENABLE;
+        driveZero();
 
     delayMicroseconds(HALF_BIT_US);
 
-    TX_DISABLE;
+    setZeroState();
 
     delayMicroseconds(HALF_BIT_US);
 }
 
-// ---------- Wobbled data generator ----------
-uint16_t getWobbledValue()
+
+// ============================================================
+// GENERATE RANDOM BCD PAYLOAD
+//
+// Creates 5 BCD digits:
+//
+// Example:
+//     12345
+//
+// packed into ARINC bits 11-29
+// ============================================================
+
+uint32_t generateRandomBCD()
 {
-    wobble += wobbleDir;
+    uint32_t data = 0;
 
-    if (wobble >= wobbleMax) wobbleDir = -1;
-    if (wobble <= -wobbleMax) wobbleDir = 1;
+    for (int digit = 0; digit < 5; digit++)
+    {
+        uint8_t d = random(0, 10);
 
-    return baseValue + wobble;
+        data |= ((uint32_t)d << (digit * 4));
+    }
+
+    return data;
 }
 
-// ---------- Build ARINC word ----------
-uint32_t makeTestWord(uint8_t label)
+
+// ============================================================
+// BUILD ARINC WORD
+// ============================================================
+
+uint32_t buildWord()
 {
     uint32_t w = 0;
 
-    // correct ARINC label ordering
-    w |= reverse8(label);
+    // --------------------------------------------------------
+    // LABEL
+    // --------------------------------------------------------
 
-    // controlled wobble data field
-    uint32_t dataField = getWobbledValue();
-    w |= (dataField << 10);
+    w |= LABEL;
 
-    // SSM = normal positive
-    w |= ((uint32_t)0x0 << 29);
+    // --------------------------------------------------------
+    // SDI (bits 9-10)
+    // --------------------------------------------------------
 
-    // odd parity
+    w |= ((uint32_t)SDI << 8);
+
+    // --------------------------------------------------------
+    // RANDOM BCD DATA
+    // --------------------------------------------------------
+
+    uint32_t data = generateRandomBCD();
+
+    w |= (data << 10);
+
+    // --------------------------------------------------------
+    // SSM (bits 30-31)
+    // --------------------------------------------------------
+
+    w |= ((uint32_t)SSM << 29);
+
+    // --------------------------------------------------------
+    // ODD PARITY
+    // --------------------------------------------------------
+
     int ones = 0;
 
     for (int i = 0; i < 31; i++)
-        if (w & (1UL << i)) ones++;
+    {
+        if (w & (1UL << i))
+            ones++;
+    }
 
+    // parity bit set so TOTAL count is odd
     if ((ones % 2) == 0)
         w |= (1UL << 31);
 
     return w;
 }
 
-// ---------- Send word ----------
+
+// ============================================================
+// SEND COMPLETE WORD
+// ============================================================
+
 void sendWord(uint32_t w)
 {
-    TRIG_HIGH;
+    digitalWrite(TRIG_PIN, HIGH);
 
     for (int i = 0; i < 32; i++)
-        rzPulse((w >> i) & 1);
-
-    TRIG_LOW;
-
-    TX_DISABLE;
-
-    delayMicroseconds(WORD_GAP_US);
-}
-
-// ---------- Hold label for time ----------
-void holdLabel(uint8_t label, uint32_t ms)
-{
-    uint32_t word = makeTestWord(label);
-
-    unsigned long start = millis();
-
-    while (millis() - start < ms)
     {
-        sendWord(word);
-        heartbeat();
-    }
-}
-
-// ---------- Priority sweep ----------
-void sweepPriority(uint32_t dwellMs)
-{
-    for (uint8_t label = PRI_START; label <= PRI_END; label++)
-    {
-        holdLabel(label, dwellMs);
-    }
-}
-
-// ---------- Remainder sweep ----------
-void sweepRemainder(uint32_t dwellMs)
-{
-    for (uint16_t label = 0; label <= 0377; label++)
-    {
-        if (label >= PRI_START && label <= PRI_END)
-            continue;
-
-        holdLabel(label, dwellMs);
-    }
-}
-
-// ---------- LED phase indicator ----------
-void phaseBlink(uint8_t phase)
-{
-    for (uint8_t i = 0; i < phase; i++)
-    {
-        LED_HIGH;
-        delay(100);
-        LED_LOW;
-        delay(100);
+        sendBit((w >> i) & 1);
     }
 
-    delay(500);
+    digitalWrite(TRIG_PIN, LOW);
+
+    setZeroState();
 }
 
-// ---------- Phase runner ----------
-void runPhase(uint8_t phase, uint32_t dwellMs)
-{
-    Serial.print("PHASE ");
-    Serial.println(phase);
 
-    phaseBlink(phase);
+// ============================================================
+// SETUP
+// ============================================================
 
-    Serial.println("PRIORITY SWEEP");
-    sweepPriority(dwellMs);
-
-    Serial.println("REMAINDER SWEEP");
-    sweepRemainder(dwellMs);
-}
-
-// ---------- Setup ----------
 void setup()
 {
-    pinMode(POLARITY_PIN, OUTPUT);
-    pinMode(ENABLE_PIN, OUTPUT);
+    pinMode(DATA_PIN, OUTPUT);
+    pinMode(ZERO_PIN, OUTPUT);
     pinMode(TRIG_PIN, OUTPUT);
-    pinMode(LED_BUILTIN, OUTPUT);
 
-    TX_DISABLE;
-    TRIG_LOW;
-    LED_LOW;
+    setZeroState();
+
+    digitalWrite(TRIG_PIN, LOW);
 
     Serial.begin(115200);
 
-    Serial.println("ARINC429 V4 priority + wobble + phased sweep");
+    Serial.println();
+    Serial.println("ARINC429 Fuel Gauge Generator");
+    Serial.println("LABEL=034 SDI=3 SSM=3");
+    Serial.println();
+    
+    randomSeed(analogRead(A0));
 }
 
-// ---------- Main ----------
+
+// ============================================================
+// MAIN LOOP
+// ============================================================
+
 void loop()
 {
-    runPhase(1, 250);     // fast discovery
-    runPhase(2, 2000);    // medium persistence
-    runPhase(3, 8000);    // long dwell
+    uint32_t word = buildWord();
+
+    sendWord(word);
+
+    // --------------------------------------------------------
+    // Debug print
+    // --------------------------------------------------------
+
+    Serial.print("TX WORD: 0x");
+    Serial.println(word, HEX);
+
+    // --------------------------------------------------------
+    // Visible LED pattern
+    // --------------------------------------------------------
+
+    for (int i = 0; i < 2; i++)
+    {
+        digitalWrite(TRIG_PIN, HIGH);
+        delay(60);
+
+        digitalWrite(TRIG_PIN, LOW);
+        delay(60);
+    }
+
+    delay(MESSAGE_GAP_MS);
 }
