@@ -82,10 +82,10 @@ For Boeing aircraft we adopt the **P-designators** used in the WDM, AMM, and IPC
 - `p1-captains-panel` — captain's main instrument panel
 - `p2-center-instrument-panel` — engine instruments (verify designator from WDM)
 - `p3-first-officers-panel` — first officer's main instrument panel
+- `p4-flight-engineers-panel` — flight engineer's main panel (confirmed P4 from the WDM fuel pages, 28-41-11)
 - `p5-overhead-panel` — forward overhead (verify designator from WDM)
 - `p7-glareshield` — mode control / autopilot panel (verify designator from WDM)
 - `p8-aft-pedestal` — aft electronic control panel (CIVA CDUs etc.)
-- `p9-flight-engineers-panel` — flight engineer's main panel
 - `p10-center-pedestal` — throttle quadrant, comm/nav radios (verify designator from WDM)
 
 For panels not covered by a P-designator (or for non-Boeing aircraft), use a descriptive name without the prefix.

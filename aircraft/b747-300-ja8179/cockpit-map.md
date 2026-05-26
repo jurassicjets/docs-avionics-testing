@@ -20,10 +20,11 @@ Panel locations in the cockpit, with cross-references to the panel docs. Boeing 
 | P1 | Forward, captain (left) | [panels/p1-captains-panel](panels/p1-captains-panel/README.md) | captain's main instruments |
 | P2 _(verify)_ | Forward, center | [panels/p2-center-instrument-panel](panels/p2-center-instrument-panel/README.md) | engine instruments |
 | P3 | Forward, first officer (right) | [panels/p3-first-officers-panel](panels/p3-first-officers-panel/README.md) | first officer's main instruments |
+| P4 | Flight engineer's station | [panels/p4-flight-engineers-panel](panels/p4-flight-engineers-panel/README.md) | fuel (m154), electrical, hydraulics, pneumatics, APU; CIVA CDU (1 of 3) |
 | P5 _(verify)_ | Forward overhead | [panels/p5-overhead-panel](panels/p5-overhead-panel/README.md) | electrical, hydraulics, fuel, pneumatics, APU |
 | P7 _(verify)_ | Glareshield | [panels/p7-glareshield](panels/p7-glareshield/README.md) | autopilot mode control, annunciators |
 | P8 | Aft pedestal | [panels/p8-aft-pedestal](panels/p8-aft-pedestal/README.md) | aft electronic control panel — CIVA CDUs (2 of 3) |
-| P9 | Flight engineer's station | [panels/p9-flight-engineers-panel](panels/p9-flight-engineers-panel/README.md) | three-crew aircraft — CIVA CDU (1 of 3) |
+| P9 _(verify)_ | Pedestal | _not yet documented_ | pedestal panel — designator/contents to confirm |
 | P10 _(verify)_ | Center pedestal | [panels/p10-center-pedestal](panels/p10-center-pedestal/README.md) | throttle quadrant, comm/nav radios, transponder |
 
 _Add rows for additional side panels, circuit-breaker panels, or auxiliary panels as they're documented. Drop or correct any P-designator that doesn't match the WDM for this airframe._
