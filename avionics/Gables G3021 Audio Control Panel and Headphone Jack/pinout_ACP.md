@@ -6,8 +6,8 @@ Pinout for the Gables G3021 ACP
 
 | PIN | FUNCTION | SIGNAL | R/W/D | NOTES
 |--|--|--|--|--|
-| 1 |  |  |  |  |
-| 2 |  |  |  |  |
+| 1 | PA control | high-Z/gnd | W |  |
+| 2 | PA common | gnd | R | required for PA mic channel |
 | 3 |  |  |  |  |
 | 4 |  |  |  |  |
 | 5 |  |  |  |  |
@@ -16,7 +16,7 @@ Pinout for the Gables G3021 ACP
 | 8 | audio common | gnd | R |  |
 | 9 |  |  |  |  |
 | 10 |  |  |  |  |
-| 11 |  |  |  |  |
+| 11 | intph common | gnd | R | required for all mic channels except PA |
 | 12 |  |  |  |  |
 | 13 |  |  |  |  |
 | 14 |  |  |  |  |
@@ -29,8 +29,8 @@ Pinout for the Gables G3021 ACP
 | 21 |  |  |  |  |
 | 22 |  |  |  |  |
 | 23 |  |  |  |  |
-| 24 |  |  |  |  |
-| 25 |  |  |  |  |
+| 24 | intph audio | audio | R |  |
+| 25 | intph mic | mic | W |  |
 | 26 |  |  |  |  |
 | 27 |  |  |  |  |
 | 28 |  |  |  |  |
@@ -69,9 +69,9 @@ Pinout for the Gables G3021 ACP
 | 1 |  |  |  |  |
 | 2 |  |  |  |  |
 | 3 |  |  |  |  |
-| 4 |  |  |  |  |
-| 5 |  |  |  |  |
-| 6 |  |  |  |  |
+| 4 | handheld mic | mic | R | hot mic |
+| 5 | handheld ptt | high-Z/gnd | R |  |
+| 6 | handheld common | gnd | W |  |
 | 7 |  |  |  |  |
 | 8 |  |  |  |  |
 | 9 |  |  |  |  |

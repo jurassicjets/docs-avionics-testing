@@ -29,8 +29,8 @@ Pinout for the Headphone Jack
 | 21 |  |  |  |  |
 | 22 |  |  |  |  |
 | 23 |  |  |  |  |
-| 24 |  |  |  |  |
-| 25 |  |  |  |  |
+| 24 | headset audio | audio | R |  |
+| 25 | headset common | gnd | R |  |
 | 26 |  |  |  |  |
 | 27 |  |  |  |  |
 | 28 |  |  |  |  |
