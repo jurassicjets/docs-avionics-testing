@@ -4,7 +4,7 @@ Undocumented behavior, gotchas, and failure modes. Bench observations are marked
 
 ## `-A.b` is a bus-communication fault code, not "no data"
 
-**The display reads `-A.b`** (earlier bench notes recorded this as "A.6" — a misread of the alphanumeric segments). Per AMM 28-41-03 indicator self-test / Fig 502 display states:
+**The display reads `-A.b`**. Per AMM 28-41-03 indicator self-test / Fig 502 display states:
 
 - `-A` = ARINC **Bus A** failed, `-b` = **Bus B** failed, `-A.b` = **both buses** failed.
 - A fault on *either* bus blanks the quantity. The gauge requires **both Bus A and Bus B communicating continuously** to show a number.

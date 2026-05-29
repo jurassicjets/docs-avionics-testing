@@ -33,15 +33,15 @@ Connector pinout and signal definitions for the benchtop fuel quantity indicator
 | 11 | chassis ground | gnd | R |  |
 | 12 | chassis ground | gnd | R |  |
 | 13 | shield | gnd | R |  |
-| 14 | ID X1 | gnd | W | strap common = logic **1** |
+| 14 | ID X1 | TODO: measure V | W | strap common = logic **1** |
 | 15 | ID D | 0/1 (X2/X1) | R | tank-index strap bit (LSB) |
-| 16 | ID X2 | 5 VDC | W | strap common = logic **0** |
+| 16 | ID X2 | gnd | W | strap common = logic **0** |
 | 17 | FQPU primary input | ARINC 429 B | R | from Fuel Quantity Processor Unit |
 | 18 | FQPU primary input | ARINC 429 A | R | from Fuel Quantity Processor Unit |
 | 19 | DC ground | gnd | R |  |
 | 20 | DC power | 28 VDC | R | from **28 V DC ground-handling bus** (ATA 28-41-11) |
-| 21 |  |  |  |  |
-| 22 |  |  |  |  |
+| 21 | Lighting | 5 VAC  | R | Rectified and ADC converts to display brightness |
+| 22 | Lighting | 5 VAC | R |  |
 | 23 | DC ground | gnd | R |  |
 | 24 | DC power | 28 VDC | R | from **28 V DC essential bus** (ATA 28-41-14) |
 
@@ -61,4 +61,4 @@ Pins 6, 7, 8, 15 (ID A/B/C/D) encode which tank this gauge represents. Each ID p
 | 0 1 1 1 | 7 | Reserve 2 |
 | 1 0 0 0 | 8 | Reserve 1 |
 
-The center-wing DUT is index **0** — all four ID pins strapped to X2. The strap is the gauge's tank **self-ID** on the shared FQPU bus (all gauges sit on the same ARINC lines); it is *not* the units source and *not* the same as the ARINC SDI. The center gauge reads its quantity at **SDI 2** (see [`bench-test.md`](bench-test.md) and [`quirks.md`](quirks.md)).
+The center-wing DUT is index **0** — all four ID pins strapped to X2. The strap is the gauge's tank **self-ID** on the shared FQPU bus (all gauges sit on the same ARINC lines); it is *not* the units source and *not* the same as the ARINC SDI. The center gauge reads its quantity at **SDI 1** (see [`bench-test.md`](bench-test.md) and [`quirks.md`](quirks.md)).
