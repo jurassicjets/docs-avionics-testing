@@ -20,7 +20,7 @@ class VirtualCableSource(AudioSource):
             device=device_name,
             channels=channels,
             samplerate=48000,
-            blocksize=0,
+            blocksize=1024,
             callback=self.input_callback
         )
 
@@ -41,8 +41,12 @@ class VirtualCableSource(AudioSource):
                 indata.copy()
             )
         except queue.Full:
-            pass
+            try:
+                self.queue.get_nowait()  # discard oldest
+            except queue.Empty:
+                pass
 
+    self.queue.put_nowait(indata.copy())
     def get_audio(self, frames):
 
         try:

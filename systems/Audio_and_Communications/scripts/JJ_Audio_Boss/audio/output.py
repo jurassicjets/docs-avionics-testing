@@ -10,5 +10,5 @@ def create_output_stream(
         samplerate=48000,
         channels=channels,
         callback=callback,
-        blocksize=0
+        blocksize=1024
     )
