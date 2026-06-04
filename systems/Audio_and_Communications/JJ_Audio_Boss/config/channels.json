@@ -1,7 +1,8 @@
 {
-    "device": "Out 1-24 (MOTU Pro Audio), Windows WASAPI",
-	"output_channels": 24,
-	"vhf_cable": "CABLE Output (VB-Audio Virtual , Windows WASAPI",
+    "device": "Speakers (wr4800_821d), Windows WDM-KS",
+	"output_channels": 8,
+	"vhf_cable": "CABLE Output (VB-Audio Point), Windows WDM-KS",
+	"block_size": 1024,
 
     "channels": {
         "VHF1": 0,

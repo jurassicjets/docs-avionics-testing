@@ -46,7 +46,8 @@ class VirtualCableSource(AudioSource):
             except queue.Empty:
                 pass
 
-    self.queue.put_nowait(indata.copy())
+            self.queue.put_nowait(indata.copy())
+    
     def get_audio(self, frames):
 
         try:

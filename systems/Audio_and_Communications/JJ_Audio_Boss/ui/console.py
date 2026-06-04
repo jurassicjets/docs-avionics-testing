@@ -59,25 +59,18 @@ class StatusConsole:
 
         print(f"Uptime        : {self.uptime()}")
         print(f"Restart Count : {restart_count}")
-
-        print()
-
-        print("OUTPUT")
-
         print(f"  Device      : {output_device}")
         print(f"  Callbacks/s : {callback_rate:.1f}")
         
         if last_error:
-            print(f"  Last Error  : {color}{last_error}{RESET}")
+            print(f"  Last Error  : {RED}{last_error}{RESET}")
         
         print()
 
-        print("XPLANE")
-
-        print(
-            f"  Connected   : "
-            f"{'YES' if state.connected else 'NO'}"
-        )
+        if state.connected:
+            print(f"{GREEN}X-PLANE CONNECTED{RESET}")
+        else:
+            print(f"{RED}X-PLANE CONNECTION LOST{RESET}")
 
         print()
 

@@ -22,6 +22,7 @@ with open("config/channels.json", "r") as f:
 
 DEVICE_NAME = config["device"]
 OUTPUT_CHANNELS = config["output_channels"]
+BLOCK_SIZE = config["block_size"]
 
 
 # --------------------------------------------------
@@ -53,8 +54,8 @@ vhf = VirtualCableSource(
 engine.add_source(
     vhf,
     [
-        config["channels"]["VHF1"],
-        config["channels"]["VHF2"]
+        config["channels"]["VHF3"],
+        config["channels"]["HF1"]
     ]
 )
 

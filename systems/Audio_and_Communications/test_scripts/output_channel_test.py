@@ -2,9 +2,9 @@ import sounddevice as sd
 import numpy as np
 import time
 
-DEVICE_NAME = "Out 1-24 (MOTU Pro Audio), Windows WASAPI"
+DEVICE_NAME = "Speakers (wr4800_821d), Windows WDM-KS"
 
-CHANNELS = 24
+CHANNELS = 8
 SR = 48000
 
 for active_channel in range(CHANNELS):
