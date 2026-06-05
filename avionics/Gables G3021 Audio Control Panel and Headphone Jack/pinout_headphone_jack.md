@@ -23,16 +23,16 @@ Pinout for the Headphone Jack
 | 15 |  |  |  |  |
 | 16 |  |  |  |  |
 | 17 |  |  |  |  |
-| 18 |  |  |  |  |
+| 18 | PTT | pull down to gnd | R |  |
 | 19 |  |  |  |  |
-| 20 |  |  |  |  |
+| 20 | ground | gnd | W |  |
 | 21 |  |  |  |  |
 | 22 |  |  |  |  |
 | 23 |  |  |  |  |
 | 24 | headset audio | audio | R |  |
 | 25 | headset common | gnd | R |  |
-| 26 |  |  |  |  |
-| 27 |  |  |  |  |
+| 26 | mic | mic | R |  |
+| 27 | mic ground | W |  |  |
 | 28 |  |  |  |  |
 | 29 |  |  |  |  |
 | 30 |  |  |  |  |
