@@ -1,0 +1,22 @@
+{
+    "device": "PC Speaker (Realtek HD Audio 2nd output with SST), Windows WDM-KS",
+	"output_channels": 8,
+	"vhf_cable": "CABLE Output (VB-Audio Point), Windows WDM-KS",
+	"block_size": 1024,
+
+    "channels": {
+        "VHF1": 0,
+        "VHF2": 1,
+        "VHF3": 2,
+        "HF1": 3,
+        "HF2": 4,
+        "NAV1": 5,
+        "NAV2": 6,
+        "ADF1": 7,
+        "ADF2": 8,
+		"ATC":9,
+        "MKR": 10,
+		"DME1": 11,
+		"DME2": 12
+    }
+}

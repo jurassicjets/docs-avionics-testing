@@ -8,11 +8,13 @@ class AudioManager:
             self,
             device_name,
             output_channels,
-            callback):
+            callback,
+            block_size=1024):
 
         self.device_name = device_name
         self.output_channels = output_channels
         self.callback = callback
+        self.block_size = block_size
 
         self.stream = None
         self.last_error = ""
@@ -52,7 +54,8 @@ class AudioManager:
             self.stream = create_output_stream(
                 self.device_name,
                 self.output_channels,
-                self.callback
+                self.callback,
+                self.block_size
             )
 
             self.stream.start()

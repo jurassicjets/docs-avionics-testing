@@ -11,7 +11,8 @@ from xplane.state import AircraftState
 from xplane.udp import XPlaneUDP
 
 from sources.virtual_cable import VirtualCableSource
-
+from sources.morse import MorseSource
+from sources.audio_file import AudioFileSource
 
 # --------------------------------------------------
 # Config
@@ -47,15 +48,41 @@ console = StatusConsole()
 # Sources
 # --------------------------------------------------
 
-vhf = VirtualCableSource(
-    config["vhf_cable"]
+#vhf = VirtualCableSource(
+#    config["vhf_cable"],
+#)
+
+#nav1 = MorseSource(
+#    identifier="SEA",
+#    station_type="NDB"
+#)
+#
+#engine.add_source(
+#    nav1,
+#    [
+#        config["channels"]["VHF1"]
+#    ]
+#)
+#
+#nav1.set_signal_strength(0.2)
+#nav1.set_static_amount(0.5)
+
+#engine.add_source(
+#    vhf,
+#    [
+#        config["channels"]["VHF1"],
+#        config["channels"]["VHF2"]
+#    ]
+#)
+
+demo = AudioFileSource(
+    "sound_samples/MSP_ATIS.wav",
 )
 
 engine.add_source(
-    vhf,
+    demo,
     [
-        config["channels"]["VHF3"],
-        config["channels"]["HF1"]
+        config["channels"]["VHF1"]
     ]
 )
 
@@ -67,7 +94,8 @@ engine.add_source(
 audio_manager = AudioManager(
     DEVICE_NAME,
     OUTPUT_CHANNELS,
-    engine.callback
+    engine.callback,
+    BLOCK_SIZE
 )
 
 
@@ -165,5 +193,6 @@ while True:
         callback_rate=callback_rate,
         state=state,
         restart_count=restart_count,
-        last_error=audio_manager.last_error
+        last_error=audio_manager.last_error,
+        warnings=engine.invalid_mappings
     )

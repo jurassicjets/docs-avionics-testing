@@ -41,7 +41,8 @@ class StatusConsole:
             callback_rate,
             state,
             restart_count,
-            last_error):
+            last_error,
+            warnings):
             
         os.system(CLEAR_CMD)
 
@@ -72,6 +73,18 @@ class StatusConsole:
         else:
             print(f"{RED}X-PLANE CONNECTION LOST{RESET}")
 
+        if warnings:
+        
+            print()
+        
+            for warning in warnings.values():
+        
+                print(
+                    f"{YELLOW}"
+                    f"WARNING: {warning}"
+                    f"{RESET}"
+                )
+        
         print()
 
         print("RADIOS")

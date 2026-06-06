@@ -10,17 +10,19 @@ class VirtualCableSource(AudioSource):
     def __init__(
             self,
             device_name,
+            block_size=1024,
             channels=2):
 
         self.channels = channels
+        self.block_size = block_size
 
-        self.queue = queue.Queue(maxsize=2)
+        self.queue = queue.Queue(maxsize=4)
 
         self.stream = sd.InputStream(
             device=device_name,
             channels=channels,
             samplerate=48000,
-            blocksize=1024,
+            blocksize=block_size,
             callback=self.input_callback
         )
 

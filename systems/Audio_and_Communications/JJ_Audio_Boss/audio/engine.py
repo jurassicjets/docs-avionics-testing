@@ -1,5 +1,5 @@
 import numpy as np
-import time
+
 
 class AudioEngine:
 
@@ -10,6 +10,8 @@ class AudioEngine:
         self.sources = []
 
         self.callback_count = 0
+
+        self.invalid_mappings = {}
 
     def add_source(
             self,
@@ -27,9 +29,6 @@ class AudioEngine:
             time_info,
             status):
 
-        now = time.time()
-#        print(f"[MOTU OUT] {now:.6f} frames={frames}")
-
         self.callback_count += 1
 
         outdata.fill(0)
@@ -40,14 +39,50 @@ class AudioEngine:
 
             if audio.ndim == 1:
 
-                outdata[:, channel_map[0]] += audio
+                dst_ch = channel_map[0]
+
+                if dst_ch >= outdata.shape[1]:
+
+                    key = f"OUT{dst_ch}"
+
+                    if key not in self.invalid_mappings:
+
+                        self.invalid_mappings[key] = (
+                            f"Output {dst_ch} unavailable"
+                        )
+
+                    continue
+
+                outdata[:, dst_ch] += audio
 
             else:
 
                 for src_ch, dst_ch in enumerate(channel_map):
 
-                    if src_ch < audio.shape[1]:
+                    if src_ch >= audio.shape[1]:
 
-                        outdata[:, dst_ch] += (
-                            audio[:, src_ch]
-                        )
+                        key = f"SRC{src_ch}"
+
+                        if key not in self.invalid_mappings:
+
+                            self.invalid_mappings[key] = (
+                                f"Source missing channel {src_ch}"
+                            )
+
+                        continue
+
+                    if dst_ch >= outdata.shape[1]:
+
+                        key = f"OUT{dst_ch}"
+
+                        if key not in self.invalid_mappings:
+
+                            self.invalid_mappings[key] = (
+                                f"Output {dst_ch} unavailable"
+                            )
+
+                        continue
+
+                    outdata[:, dst_ch] += (
+                        audio[:, src_ch]
+                    )
