@@ -48,9 +48,19 @@ console = StatusConsole()
 # Sources
 # --------------------------------------------------
 
-#vhf = VirtualCableSource(
-#    config["vhf_cable"],
-#)
+
+vhf = VirtualCableSource(
+    config["vhf_cable"],
+)
+
+engine.add_source(
+    vhf,
+    [
+        config["channels"]["VHF1"],
+        config["channels"]["VHF2"]
+    ]
+)
+
 
 #nav1 = MorseSource(
 #    identifier="SEA",
@@ -67,24 +77,17 @@ console = StatusConsole()
 #nav1.set_signal_strength(0.2)
 #nav1.set_static_amount(0.5)
 
+
+#demo = AudioFileSource(
+#    "sound_samples/MSP_ATIS.wav",
+#)
+#
 #engine.add_source(
-#    vhf,
+#    demo,
 #    [
-#        config["channels"]["VHF1"],
-#        config["channels"]["VHF2"]
+#        config["channels"]["VHF1"]
 #    ]
 #)
-
-demo = AudioFileSource(
-    "sound_samples/MSP_ATIS.wav",
-)
-
-engine.add_source(
-    demo,
-    [
-        config["channels"]["VHF1"]
-    ]
-)
 
 
 # --------------------------------------------------
