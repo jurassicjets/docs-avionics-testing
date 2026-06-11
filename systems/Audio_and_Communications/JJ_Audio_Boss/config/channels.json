@@ -1,8 +1,8 @@
 {
-    "device": "Speakers (Realtek(R) Audio), Windows DirectSound",
-	"output_channels": 2,
+    "device": "Out 1-24 (MOTU Pro Audio), Windows WASAPI",
+	"output_channels": 24,
+	"vhf_cable": "CABLE Output (VB-Audio Virtual , Windows WASAPI",
 	"block_size": 1024,
-	"vhf_cable": "CABLE Output (VB-Audio Virtual Cable), Windows DirectSound",
 
     "channels": {
         "VHF1": 0,

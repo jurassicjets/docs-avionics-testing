@@ -49,45 +49,55 @@ console = StatusConsole()
 # --------------------------------------------------
 
 
-vhf = VirtualCableSource(
+vhf1 = VirtualCableSource(
     config["vhf_cable"],
 )
 
-engine.add_source(
-    vhf,
-    [
-        config["channels"]["VHF1"],
-        config["channels"]["VHF2"]
-    ]
+nav1 = MorseSource(
+    identifier="SJC",
+    station_type="NDB"
 )
 
 
-#nav1 = MorseSource(
-#    identifier="SEA",
-#    station_type="NDB"
-#)
-#
-#engine.add_source(
-#    nav1,
-#    [
-#        config["channels"]["VHF1"]
-#    ]
-#)
-#
-#nav1.set_signal_strength(0.2)
-#nav1.set_static_amount(0.5)
+
+nav1.set_signal_strength(0.2)
+nav1.set_static_amount(0.5)
 
 
-#demo = AudioFileSource(
-#    "sound_samples/MSP_ATIS.wav",
-#)
-#
-#engine.add_source(
-#    demo,
-#    [
-#        config["channels"]["VHF1"]
-#    ]
-#)
+vhf3 = AudioFileSource(
+    "sound_samples/MSP_ATIS.wav",
+)
+
+nav2 = AudioFileSource(
+    "sound_samples/YYZ.wav",
+)
+
+engine.add_source(
+    nav1,
+    [
+        config["channels"]["NAV1"]
+    ]
+)
+engine.add_source(
+    nav2,
+    [
+        config["channels"]["NAV2"]
+    ]
+)
+
+engine.add_source(
+    vhf1,
+    [
+        config["channels"]["VHF1"]
+    ]
+)
+
+engine.add_source(
+    vhf3,
+    [
+        config["channels"]["VHF3"]
+    ]
+)
 
 
 # --------------------------------------------------
