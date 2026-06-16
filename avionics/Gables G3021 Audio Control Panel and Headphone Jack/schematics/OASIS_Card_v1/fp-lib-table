@@ -1,0 +1,4 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "Jurassic_Jets_Footprints")(type "KiCad")(uri "${KIPRJMOD}/Jurassic_Jets_Footprints.pretty")(options "")(descr ""))
+)

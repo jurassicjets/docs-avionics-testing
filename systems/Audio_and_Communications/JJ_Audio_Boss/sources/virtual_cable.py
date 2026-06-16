@@ -16,7 +16,7 @@ class VirtualCableSource(AudioSource):
         self.channels = channels
         self.block_size = block_size
 
-        self.queue = queue.Queue(maxsize=4)
+        self.queue = queue.Queue(maxsize=5)
 
         self.stream = sd.InputStream(
             device=device_name,
