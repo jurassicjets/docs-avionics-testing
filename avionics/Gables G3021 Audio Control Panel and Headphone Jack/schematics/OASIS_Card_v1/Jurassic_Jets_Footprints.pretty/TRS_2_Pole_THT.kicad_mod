@@ -241,14 +241,5 @@
 		(roundrect_rratio 0.2)
 		(uuid "1eb10cab-8f92-450c-9d58-528a4077e030")
 	)
-	(group ""
-		(uuid "1bda63a8-7e99-4338-a5d9-b8d20be54083")
-		(members "19d65ca8-2dbb-470c-b69a-7ed0ba568091" "3084fd23-05b6-4f82-9d99-5405abf2ebac"
-			"3c995aa1-c003-41a5-a1a3-48961e185939" "583e0812-49eb-4f22-8f29-96499ecd812f"
-			"7b29b1ba-9993-44d0-ad8b-cf1b29efb19b" "df6b8a90-a4dd-4e6a-8cf9-91f2536b777c"
-			"f3432f79-cb18-477c-93d0-2514a9cf25e8" "f94a284f-7f10-4d51-94ec-af92d1568eae"
-			"fee59d7d-a722-4f18-869b-b30c8fb131db"
-		)
-	)
 	(embedded_fonts no)
 )

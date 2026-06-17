@@ -1,4 +1,4 @@
-26704993924903657
+26710338655569316
 Audio_Module
 Reverb_BTDR-1H
 Digital Reverberation Unit, http://www.belton.co.kr/inc/downfile.php?seq=17&file=pdf (footprint from http://www.uk-electronic.de/PDF/BTDR-1.pdf)
@@ -68487,6 +68487,27 @@ solder jumper open
 0
 3
 3
+Jurassic_Jets_Footprints
+2x08_3.5mm_Phoenix_Connector_knockoff
+Through hole straight pin header, 2x08, 2.54mm pitch, double rows
+Through hole pin header THT 2x08 2.54mm double row
+0
+16
+16
+Jurassic_Jets_Footprints
+TRS_2_Pole_THT
+
+
+0
+6
+6
+Jurassic_Jets_Footprints
+Untitled
+
+
+0
+1
+1
 LED_SMD
 LED-APA102-2020
 http://www.led-color.com/upload/201604/APA102-2020%20SMD%20LED.pdf
