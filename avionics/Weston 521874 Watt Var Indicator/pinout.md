@@ -12,8 +12,8 @@ Pinout for the Weston 521874 Watt Var Indicator
 | 4 | WATT/VAR Select Ground | GND | W |  |
 | 5 |  |  |  |  |
 | 6 |  |  |  |  |
-| 7 | Position Signal | ?? | ?? |  |
-| 8 | Position Signal | ?? | ?? |  |
+| 7 | Position Signal | 400hz Unknown Amplitude | W | see README |
+| 8 | Position Signal | 400hz Unknown Amplitude | W | see README |
 | 9 |  |  |  |  |
 | 10 |  |  |  |  |
 | 11 |  |  |  |  |
